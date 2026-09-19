@@ -19,6 +19,8 @@ Not yet:
 - Track 1 UI/UX issues are not submitted in this PR.
 - No build-track prototype has been started yet.
 
+Note: This is a Track 0 profile PR, so the Finishing checklist will apply more directly to my later build-track submission.
+
 **What I learned or had to look up**
 
 I read the repository README, AGENTS.md, checklist, and PR/issue templates to understand the required submission flow, rules, and evaluation criteria.
@@ -44,7 +46,7 @@ Profile -> Social accounts).
 - Team lead: Not formally yet
 - Team projects: Previous company production work at dBee.ai; screenshot evidence available if requested. Also contributed to Recode Hive: https://github.com/recodehive/recode-website/pull/103
 - Proudest work: GST Ops - https://github.com/developer-mohitsoni/gst-ops; Personalize PDF - https://github.com/developer-mohitsoni/personalize_pdf
-- Contributions elsewhere: https://github.com/recodehive/recode-website/pull/103
+- Contributions elsewhere: 50+ merged pull requests and issue reports across previous company product work and open-source repositories; public example: https://github.com/recodehive/recode-website/pull/103
 
 ## Checklist
 
