@@ -4,9 +4,16 @@ Track 4 workflow prototype for WhipScribe.
 
 ## Demo Recording
 
-The four-minute demo video has been recorded for the submission. In the recording, the app is shown in demo mode because paid WhipScribe API access is not available locally.
+The submission demo can be recorded in about four minutes. In the current local recording, the app is shown in demo mode because paid WhipScribe API access is not available locally.
 
 > Real WhipScribe API key configured ho to same upload flow real transcription use karega; demo mode is only because paid API key unavailable.
+
+Current submission plan:
+
+- Attach the first demo video to the PR now. It shows the complete product workflow using clearly marked demo transcript data.
+- Track real API-credit access in issue #30: "Question: How do I receive API credits for testing Track 4 with my own account?"
+- After API credits/key access is available, add a second PR update with a real owned-recording upload demo that shows WhipScribe job creation, polling, transcript fetch, speaker confirmation, report generation, and export.
+- Until then, this README intentionally separates implemented API integration from real paid-account happy-path verification.
 
 ## Problem
 
@@ -29,7 +36,7 @@ For the demo, I used a self-created support-call recording that simulates the re
 ## What Works
 
 - One recording at a time.
-- Real WhipScribe API upload, status polling, and JSON transcript fetch.
+- Implemented WhipScribe API upload, status polling, and JSON transcript fetch flow.
 - `GET /me` retention lookup after real upload, so the UI can warn how long source audio is retained.
 - Locked and failed WhipScribe jobs are handled as actionable states instead of looping forever.
 - Backward-compatible demo mode for reviewing the workflow without paid API access.
@@ -44,6 +51,7 @@ For the demo, I used a self-created support-call recording that simulates the re
 - No CRM, Slack, Notion, or helpdesk integration.
 - No LLM scoring in v1.
 - No batch call review.
+- Real paid-account happy-path verification is pending API credits/access; tracked in issue #30.
 
 ## Run Locally
 
@@ -95,10 +103,10 @@ uvicorn app.main:app --reload
 - Manual no-key check passes: upload returns a setup error and does not expose the uploaded file content or API key in the page.
 - Demo mode works without an API key for both the support QA flow and the generic transcript review flow.
 - API-reference behavior is covered for `/me` retention, structured error messages, locked transcripts, failed jobs, and account retention persistence after upload.
-- Real WhipScribe happy-path verification still needs the contributor's own API key and owned recording.
+- Real WhipScribe happy-path verification still needs the contributor's own paid API key/API credits and owned recording; tracked in issue #30.
 - User validation is still pending with one founder, support lead, or teammate.
 
-## Two-Minute Demo Checklist
+## Four-Minute Demo Checklist
 
 - Show the upload screen.
 - Upload a self-created support-call recording if an API key is available, or use **Open Demo Transcript**.

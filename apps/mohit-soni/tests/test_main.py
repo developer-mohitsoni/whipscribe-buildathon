@@ -31,6 +31,24 @@ def test_upload_without_api_key_shows_setup_error(monkeypatch, tmp_path):
     assert "fake audio" not in response.text
 
 
+def test_empty_upload_is_rejected(monkeypatch, tmp_path):
+    class FakeClient:
+        def submit_file(self, file_path, idempotency_key):
+            raise AssertionError("empty upload should not reach WhipScribe")
+
+    monkeypatch.setenv("RUNTIME_DIR", str(tmp_path))
+    monkeypatch.setattr(main_module, "_client", lambda: FakeClient())
+    client = TestClient(app)
+
+    response = client.post(
+        "/jobs",
+        files={"file": ("call.mp3", b"", "audio/mpeg")},
+    )
+
+    assert response.status_code == 400
+    assert "Uploaded file is empty" in response.text
+
+
 def test_demo_mode_does_not_require_api_key(monkeypatch, tmp_path):
     monkeypatch.delenv("WHIPSCRIBE_API_KEY", raising=False)
     monkeypatch.setenv("RUNTIME_DIR", str(tmp_path))
@@ -127,6 +145,8 @@ def test_failed_real_job_shows_api_error(monkeypatch, tmp_path):
 def test_real_upload_saves_account_retention(monkeypatch, tmp_path):
     class FakeClient:
         def submit_file(self, file_path, idempotency_key):
+            assert file_path.name.startswith("72401f193251f177-")
+            assert ".." not in file_path.name
             return {"job_id": "job-123", "status": "queued"}
 
         def get_account(self):
@@ -138,7 +158,7 @@ def test_real_upload_saves_account_retention(monkeypatch, tmp_path):
 
     response = client.post(
         "/jobs",
-        files={"file": ("call.mp3", b"fake audio", "audio/mpeg")},
+        files={"file": ("../call name.mp3", b"fake audio", "audio/mpeg")},
         follow_redirects=False,
     )
 

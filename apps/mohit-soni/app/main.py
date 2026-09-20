@@ -67,6 +67,12 @@ def _clean_workflow(value: str | None) -> str:
     return value if value in WORKFLOWS else "support_qa"
 
 
+def _safe_filename(filename: str | None) -> str:
+    safe_name = Path(filename or "support-call").name
+    safe_name = "".join(char if char.isalnum() or char in "._-" else "_" for char in safe_name).strip("._")
+    return safe_name[:120] or "support-call"
+
+
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request):
     return _render(request, "index.html", {})
@@ -82,9 +88,13 @@ async def create_job(request: Request, file: UploadFile = File(...), workflow: s
     settings = get_settings()
     uploads_dir = settings.runtime_dir / "uploads"
     uploads_dir.mkdir(parents=True, exist_ok=True)
-    safe_name = Path(file.filename or "support-call").name
-    upload_path = uploads_dir / safe_name
     data = await file.read()
+    if not data:
+        return _render(request, "error.html", {"message": "Uploaded file is empty."}, status_code=400)
+
+    safe_name = _safe_filename(file.filename)
+    file_digest = hashlib.sha256(data).hexdigest()
+    upload_path = uploads_dir / f"{file_digest[:16]}-{safe_name}"
     upload_path.write_bytes(data)
     idempotency_key = hashlib.sha256(data + safe_name.encode("utf-8")).hexdigest()
 
